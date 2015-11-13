@@ -96,6 +96,15 @@ body {
     opacity: 1;
     visibility: visible; }
 
+.reveal .slides section .fragment.current-only {
+  opacity: 0;
+  visibility: hidden;
+  display: none; }
+  .reveal .slides section .fragment.current-only.current-fragment {
+    opacity: 1;
+    visibility: visible;
+    display: block; }
+
 .reveal .slides section .fragment.highlight-red, .reveal .slides section .fragment.highlight-current-red, .reveal .slides section .fragment.highlight-green, .reveal .slides section .fragment.highlight-current-green, .reveal .slides section .fragment.highlight-blue, .reveal .slides section .fragment.highlight-current-blue {
   opacity: 1;
   visibility: visible; }
@@ -137,11 +146,15 @@ body {
   max-width: none;
   max-height: none; }
 
+.reveal pre code {
+  -moz-tab-size: 4;
+    -o-tab-size: 4;
+       tab-size: 4; }
+
 .reveal pre.stretch code {
   height: 100%;
   max-height: 100%;
-  -moz-box-sizing: border-box;
-       box-sizing: border-box; }
+  box-sizing: border-box; }
 
 /*********************************************
  * CONTROLS
@@ -485,8 +498,7 @@ body {
   min-height: 700px;
   -webkit-backface-visibility: hidden;
           backface-visibility: hidden;
-  -moz-box-sizing: border-box;
-       box-sizing: border-box; }
+  box-sizing: border-box; }
 
 .reveal.center.cube .slides section {
   min-height: 0; }
@@ -563,8 +575,7 @@ body {
 .reveal.page .slides section {
   padding: 30px;
   min-height: 700px;
-  -moz-box-sizing: border-box;
-       box-sizing: border-box; }
+  box-sizing: border-box; }
 
 .reveal.page .slides section.past {
   z-index: 12; }
@@ -885,8 +896,7 @@ body {
     overflow: hidden;
     visibility: visible !important;
     cursor: pointer;
-    -moz-box-sizing: border-box;
-         box-sizing: border-box; }
+    box-sizing: border-box; }
   .reveal.overview .slides section:hover, .reveal.overview .slides section.present {
     outline: 10px solid rgba(150, 150, 150, 0.4);
     outline-offset: 10px; }
@@ -1006,8 +1016,7 @@ body {
   padding: 0 10px;
   float: right;
   opacity: 0.6;
-  -moz-box-sizing: border-box;
-       box-sizing: border-box; }
+  box-sizing: border-box; }
 
 .reveal .overlay header a:hover {
   opacity: 1; }

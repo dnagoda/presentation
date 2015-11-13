@@ -137,6 +137,18 @@ body {
 	}
 }
 
+.reveal .slides section .fragment.current-only {
+	opacity: 0;
+	visibility: hidden;
+    display: none;
+
+	&.current-fragment {
+		opacity: 1;
+		visibility: visible;
+        display: block;
+	}
+}
+
 .reveal .slides section .fragment.highlight-red,
 .reveal .slides section .fragment.highlight-current-red,
 .reveal .slides section .fragment.highlight-green,
@@ -189,6 +201,10 @@ body {
 .reveal .stretch {
 	max-width: none;
 	max-height: none;
+}
+
+.reveal pre code {
+	tab-size: 4;
 }
 
 .reveal pre.stretch code {
@@ -1315,5 +1331,3 @@ body {
 .zoomed .reveal .roll span:after {
 	visibility: hidden;
 }
-
-
