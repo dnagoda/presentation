@@ -61,23 +61,15 @@
 					<h2>Let's Get Started</h2>
 					<p>
 						<ul>
-							<li class="fragment">ES5 In 5 Minutes</li>
-							<li class="fragment">ES6 In 6 Minutes</li>
+							<li class="fragment">We're pressed for time so...</li>
+							<li class="fragment">Intro To JavaScript In 20 Minutes</li>
+							<li class="fragment">How To Live In The Future</li>
 							<span class="fragment"><li>Cool</span><span class="fragment">, Awesome</span><span class="fragment">, Amazing JavaScript</span></li>
 						</ul>
 					</p>
 					<aside class="notes">
 						<p>
 						JavaScript is a dynamic, untyped and interpreted programming lanaguage. It is prototype based with first class functions. Althrough it is commonly used in an object oriented style, JavaScript is a multi-paradigm language, supporting both imperative and functional styles.
-						</p>
-					</aside>
-				</section>
-
-				<section>
-					<h2>ES5 In 5 Minutes</h2>
-					<aside class="notes">
-						<p>
-						Ratified in 2011, ES5 is fully supported by all modern JavaScript environments. Including IE9!
 						</p>
 					</aside>
 				</section>
@@ -159,7 +151,7 @@ whatClass(firstClass);
 				</section>
 
 				<section>
-					<h2>Lexical Scope</h2>
+					<h2>Lexical Scoping</h2>
 					<pre><code data-trim class="javascript">
 var value = "real";
 
@@ -172,7 +164,33 @@ whatValue();
 					</code></pre>
 					<aside class="notes">
 						<p>
-						Nested functions have access to the variables defined in the same context or above.
+						Nested functions have access to the variables defined in the same scope or above.
+						</p>
+					</aside>
+				</section>
+
+				<section>
+					<h2>Block Scoping (ES6)</h2>
+					<pre><code data-trim class="javascript">
+if (true) {
+	var hoistMe = "How rude!";
+	let notMe = "Safe inside my block.";
+}
+
+console.log(hoistMe)
+> "How rude!"
+
+console.log(notMe)
+> Reference Error
+					</code></pre>
+					<aside class="notes">
+						<p>
+						Non-function blocks don't get there own scope in JavaScript. This includes conditional blocks. But, ES6 intrduced the let statement, that specifically
+						defines a variable as local to the block.
+
+						Functions defined in blocks are allows block scoped starting in ES6.
+
+						P.S. The reference error would only be thrown in strict mode. More on that later.
 						</p>
 					</aside>
 				</section>
@@ -196,8 +214,40 @@ func();
 					</code></pre>
 					<aside class="notes">
 						<p>
-						Which leads to closures. A closure is created whenever a nested function references a variable in it's inherited scope.
+						Which leads to closures. A closure is created whenever a nested function references a variable in it's inherited scope. Essentially, the original scoping is maintained
+						regardless of where the function is ultimately called.
 						</p>
+					</aside>
+				</section>
+
+				<section>
+					<h2>New Function Syntax (ES6)</h2>
+					<pre><code data-trim class="javascript">
+(function(...args) {
+	console.log(args);
+})(1, 2, 3);
+> [1, 2, 3]
+
+(function(x = 5, y = 10) {
+	console.log(x + y);
+})(null, undefined);
+> 10
+
+function destruct() {
+	return [1, 2, 3];
+}
+var [a, b , c] = destruct();
+console.log(c + ' ' + b ' ' + a)
+> 3, 2, 1
+					</code></pre>
+					<aside class="notes">
+						The (function)() form is called an Immediately Invoked Function Expression IIFE.
+
+						The spread '...' operator gathers all the arguments into an Array. This operator can also be used in non function definition contexts to break apart an array of elements.
+
+						Default arguments. Null coerces to zero and undefined looks like it wasn't provided.
+
+						Destructuring allows you to assign complex function returns to matching structures of variables. This also works for objects! Destructuring is a deep subject and there are a lot of ways to use it.
 					</aside>
 				</section>
 
@@ -290,6 +340,15 @@ student.getHappy()
 
 				<section>
 					<h2>ES6 In 6 Minutes</h2>
+				</section>
+
+				<section>
+					<h2>ES5 In 5 Minutes</h2>
+					<aside class="notes">
+						<p>
+						Ratified in 2011, ES5 is fully supported by all modern JavaScript environments. Including IE9!
+						</p>
+					</aside>
 				</section>
 
 			</div>
