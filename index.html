@@ -111,26 +111,7 @@ number.toString();
 				</section>
 
 				<section>
-					<h2>Functions Are Objects</h2>
-					<pre><code data-trim class="javascript">
-function firstClass() {
-	return "First class!";
-}
-
-firstClass.extraProperty = "Just like a regular object!";
-
-firstClass();
-> "First class!"
-					</code></pre>
-					<aside class="notes">
-						<p>
-						First class functions
-						</p>
-					</aside>
-				</section>
-
-				<section>
-					<h2>So We Can Do This</h2>
+					<h2>Functions Are First Class</h2>
 					<pre><code data-trim class="javascript">
 function firstClass() {
 	return "First class!";
@@ -190,167 +171,202 @@ console.log(notMe)
 
 						Functions defined in blocks are allows block scoped starting in ES6.
 
-						P.S. The reference error would only be thrown in strict mode. More on that later.
+						P.S. The reference error would only be thrown in strict mode.
 						</p>
 					</aside>
 				</section>
 
 				<section>
-					<h2>Closures</h2>
+					<h2>Closures (a.k.a Awesome Sauce!)</h2>
 					<pre><code data-trim class="javascript">
-function outerFunc() {
-	var innerVar = "hidden from global scope, unless...";
+function foo() {
+	var fooVar = "hidden from global scope, unless...";
 
-	function innerFunc() {
-		return innerVar;
+	function bar() {
+		return fooVar;
 	}
 
-	return innerFunc;
+	return bar;
 }
 
-var func = outerFunc();
+var func = foo()
 func();
 > "hidden from the global scope, unless..."
 					</code></pre>
 					<aside class="notes">
 						<p>
-						Which leads to closures. A closure is created whenever a nested function references a variable in it's inherited scope. Essentially, the original scoping is maintained
+						Which leads to closures. A closure is created whenever a nested function references a variable in it's lexical scope. Essentially, the original scoping is maintained
 						regardless of where the function is ultimately called.
 						</p>
 					</aside>
 				</section>
 
 				<section>
-					<h2>New Function Syntax (ES6)</h2>
+					<h2>Spread Arguments (ES6)</h2>
 					<pre><code data-trim class="javascript">
 (function(...args) {
 	console.log(args);
 })(1, 2, 3);
 > [1, 2, 3]
-
-(function(x = 5, y = 10) {
-	console.log(x + y);
-})(null, undefined);
-> 10
-
-function destruct() {
-	return [1, 2, 3];
-}
-var [a, b , c] = destruct();
-console.log(c + ' ' + b ' ' + a)
-> 3, 2, 1
 					</code></pre>
 					<aside class="notes">
 						The (function)() form is called an Immediately Invoked Function Expression IIFE.
 
 						The spread '...' operator gathers all the arguments into an Array. This operator can also be used in non function definition contexts to break apart an array of elements.
+					</aside>
+				</section>
 
+				<section>
+					<h2>Default Arguments (ES6)</h2>
+					<pre><code data-trim class="javascript">
+(function(x = 5, y = 10) {
+	console.log(x + y);
+})(null, undefined);
+> 10
+					</code></pre>
+					<aside class="notes">
 						Default arguments. Null coerces to zero and undefined looks like it wasn't provided.
+					</aside>
+				</section>
 
+				<section>
+					<h2>Destructuring (ES6)</h2>
+					<pre><code data-trim class="javascript">
+var a, b, c;
+function foo() {
+	return [1, 2, 3];
+}
+[a, b, c] = foo();
+console.log(c + ' ' + b ' ' + a);
+> 3, 2, 1
+					</code></pre>
+					<aside class="notes">
 						Destructuring allows you to assign complex function returns to matching structures of variables. This also works for objects! Destructuring is a deep subject and there are a lot of ways to use it.
 					</aside>
 				</section>
 
 				<section>
-					<h2>Custom Objects</h2>
+					<h2>Arrow Functions (ES6)</h2>
 					<pre><code data-trim class="javascript">
-function Person(name) {
-	this.name = name;
-}
-
-var me = new Person("Dave");
-me.name;
-> "Dave"
+var bar = (x, y) => console.log(x + y);
+bar(4, 5);
+> 9
 					</code></pre>
 					<aside class="notes">
-						<p>
-						Constructor functions executed with the new operator create new instances.
-						</p>
+						Arrow functions allow you to define simple functions quickly. They have some other
+						advantages that help with binding as well. They are always anonymous!
 					</aside>
 				</section>
 
 				<section>
-					<h2>Let's Add Some Methods</h2>
+					<h2>What is 'this'?</h2>
 					<pre><code data-trim class="javascript">
-Person.prototype.sayHello = function() {
-	return "Hello, I'm " + this.name + ".";
+'use strict';
+function foo() {
+	this.value = 42;
+
+	var self = this;
+
+	function bar() {
+		console.log(self.value);
+	}
+
+	bar();
 }
-
-Person.prototype.getHappy = function() {
-	return this.name + " :)";
-}
-
-var me = new Person("Dave");
-me.sayHello()
-> "Hello, I'm Dave."
-
-me.getHappy()
-> "Dave :)"
+foo();
+> 42
 					</code></pre>
 					<aside class="notes">
-						<p>
-						Using special prototype property to add methods. 'this' within the function definition refers to the calling Object.
-						</p>
+						Every function has a 'this' property that is runtime bound.
+
+						It is not:
+						<ul>
+							<li>a reference to the function</li>
+							<li>the function's scope</li>
+						</ul>
 					</aside>
 				</section>
 
 				<section>
-					<h2>How About Inheritance?</h2>
+					<h2>How about 'this'?</h2>
 					<pre><code data-trim class="javascript">
-function Student(name, subject) {
-	Person.call(this, name);
-	this.subject = subject;
+'use strict';
+function foo() {
+	this.value = 42;
+
+	function bar() {
+		console.log(this.value);
+	}
+
+	bar.bind(this)();
+	bar.apply(this);
+	bar.call(this);
 }
+foo();
+> 42
+> 42
+> 42
+					</code></pre>
+					<aside class="notes">
+						Every Function has an apply() and call() that allow you to execute a function
+						with a predefined 'this'. The only difference is that apply() takes arguments
+						as an array like object and call() takes them individually.
 
-Student.prototype = Object.create(Person.prototype);
-Student.prototype.constructor = Student;
+						Every Function also has a bind() that allows you to create a copy of the function
+						with 'this' already defined. Partials, anybody?
+					</aside>
+				</section>
 
-Student.prototype.sayHello = function() {
-	return "Hello, I'm " + this.name + ". " +
-		   "I'm studying " + this.subject + ".";
+				<section>
+					<h2>Classes?</h2>
+					<p class="fragment">First, do you really need them?</p>
+					<p class="fragment">If you do, then ES6 makes it much easier.</p>
+					<aside class="notes">
+						JavaScript is a prototype based language, so you're never going to have classes
+						exactly like you have classes in Java. But, you can get close and you even have some
+						choice about how close.
+
+						The easiest approach in ES6 uses the new class syntax.
+					</aside>
+				</section>
+
+				<section>
+					<h2>class (ES6)</h2>
+					<pre><code data-trim class="javascript">
+class Base {
+	constructor(name) {
+		this.name = name;
+	}
+	sayHello() {
+		console.log("Hi, my name is " + this.name);
+	}
 }
 					</code></pre>
 					<aside class="notes">
-						<p>Functions have 3 special methods that allow 'this' to be set before the function is executed. call(), apply() and bind().</p>
-						<p>Object.create() creates a new object with the specified prototype. This allows us to create a prototype chain.</p>
-						<p>
-						JavaScript is a prototypical language. All Objects have a prototype. When a member property is accessed, the local instance is checked and then each prototype in the prototype chain is checked. If no match is found, undefined is returned.
-						</p>
+						There can only be one 'constructor' method. There isn't a way to define class
+						properties other than it's constructor and methods. This is really just syntactic
+						sugar on top of regular Object prototypes.
 					</aside>
 				</section>
 
-<section>
-					<h2>How About Inheritance? (continued)</h2>
+				<section>
+					<h2>extends (ES6)</h2>
 					<pre><code data-trim class="javascript">
-var student = new Student("Jack", "Computer Science");
-student.sayHello()
-> "Hello, I'm Jack. I'm studying Computer Science."
-
-student.getHappy()
-> "Jack :)"
+class Extended extends Base {
+	constructor(name, surname) {
+		super(name);
+		this.surname = surname;
+	}
+	sayHello() {
+		console.log("Hi, my name is " + this.name + " " + this.surname);
+	}
+}
 					</code></pre>
 					<aside class="notes">
-						TBD
+						'extends' makes it easy to tie these prototypes together. You can use
+						'super' is access the parent classes methods.
 					</aside>
 				</section>
-
-				<section>
-					<h2>Promises</h2>
-				</section>
-
-				<section>
-					<h2>ES6 In 6 Minutes</h2>
-				</section>
-
-				<section>
-					<h2>ES5 In 5 Minutes</h2>
-					<aside class="notes">
-						<p>
-						Ratified in 2011, ES5 is fully supported by all modern JavaScript environments. Including IE9!
-						</p>
-					</aside>
-				</section>
-
 			</div>
 		</div>
 
