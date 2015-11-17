@@ -62,7 +62,7 @@
 					<p>
 						<ul>
 							<li class="fragment">We're pressed for time so...</li>
-							<li class="fragment">Intro To JavaScript In 20 Minutes</li>
+							<li class="fragment">JavaScript Language Highlights</li>
 							<li class="fragment">How To Live In The Future</li>
 							<span class="fragment"><li>Cool</span><span class="fragment">, Awesome</span><span class="fragment">, Amazing JavaScript</span></li>
 						</ul>
@@ -78,9 +78,16 @@
 					<h2>Everything Is An Object</h2>
 					<pre><code data-trim class="javascript">
 var thing = {};
-thing.name = 'The Thing';
-typeof thing;
+thing.question = 'Am I Thing One or Thing Two?';
+
+console.log(thing)
+> Object {question: "Am I Thing One or Thing 2?"}
+
+console.log(typeof thing)
 > "object"
+
+console.log(thing instanceof Object)
+> true
 					</code></pre>
 					<aside class="notes">
 						<p>
@@ -93,16 +100,22 @@ typeof thing;
 					<h2>Except For Some Of The Things</h2>
 					<pre><code data-trim class="javascript">
 var number = 42;
-typeof number;
+console.log(number)
+> 42
+
+console.log(typeof number)
 > "number"
 
-number.name = "The Answer"
-> SyntaxError
-
+console.log(number instanceof Object)
+> false
+					</code></pre>
+					<div class="fragment">
+						<p>But, they still act like Objects, mostly.</p>
+						<pre><code data-trim class="javascript">
 number.toString();
 > "42"
-					</code></pre>
-					<p>But, they still act like Objects, mostly.</p>
+						</code></pre>
+					</div>
 					<aside class="notes">
 						<p>
 						Number, String, Boolean, null and undefined are more special. Along with some others, like Errors.
@@ -114,19 +127,19 @@ number.toString();
 					<h2>Functions Are First Class</h2>
 					<pre><code data-trim class="javascript">
 function firstClass() {
-	return "First class!";
+  return "I'm first class!";
 }
 
-function whatClass(classFunc) {
-	return classFunc();
+function callIt(func) {
+  return func();
 }
 
-whatClass(firstClass);
-> "First class!"
+console.log(callIt(firstClass));
+> "I'm first class!"
 					</code></pre>
 					<aside class="notes">
 						<p>
-						Yeah!
+						Yeah! Pass functions around just like regular Objects.
 						</p>
 					</aside>
 				</section>
@@ -134,18 +147,18 @@ whatClass(firstClass);
 				<section>
 					<h2>Lexical Scoping</h2>
 					<pre><code data-trim class="javascript">
-var value = "real";
+var deal = "real";
 
-function whatValue() {
-	return value + " value";
+function lexicallySpeaking() {
+  return deal + " value";
 }
 
-whatValue();
+console.log(lexicallySpeaking())
 > "real value"
 					</code></pre>
 					<aside class="notes">
 						<p>
-						Nested functions have access to the variables defined in the same scope or above.
+						Function blocks have access to the variables defined in the same scope or above.
 						</p>
 					</aside>
 				</section>
@@ -190,7 +203,8 @@ function foo() {
 }
 
 var func = foo()
-func();
+
+console.log(func());
 > "hidden from the global scope, unless..."
 					</code></pre>
 					<aside class="notes">
@@ -208,6 +222,15 @@ func();
 	console.log(args);
 })(1, 2, 3);
 > [1, 2, 3]
+
+(function(first, second, ...rest) {
+  console.log(first);
+  console.log(second);
+  console.log(rest instanceof Array);
+})(1, 2, 4, 5, 6);
+> 1
+> 2
+> true
 					</code></pre>
 					<aside class="notes">
 						The (function)() form is called an Immediately Invoked Function Expression IIFE.
@@ -219,10 +242,23 @@ func();
 				<section>
 					<h2>Default Arguments (ES6)</h2>
 					<pre><code data-trim class="javascript">
-(function(x = 5, y = 10) {
-	console.log(x + y);
-})(null, undefined);
-> 10
+(function(x, y = 10) {
+	console.log("x is " + x);
+  	console.log("y is " + y);
+})();
+> "x is undefined"
+> "y is 10"
+					</code></pre>
+					<pre class="fragment"><code data-trim class="javascript">
+var initialX = 1;
+var initialY = function() { return initialX * 2; };
+
+(function(x = initialX, y = initialY()) {
+  	console.log("x is " + x);
+  	console.log("y is " + y);
+})();
+> "x is 1"
+> "y is 2"
 					</code></pre>
 					<aside class="notes">
 						Default arguments. Null coerces to zero and undefined looks like it wasn't provided.
@@ -237,8 +273,22 @@ function foo() {
 	return [1, 2, 3];
 }
 [a, b, c] = foo();
-console.log(c + ' ' + b ' ' + a);
+console.log(c + ' ' + b + ' ' + a);
 > 3, 2, 1
+					</code></pre>
+					<pre class="fragment"><code data-trim class="javascript">
+function bar() {
+  return {
+    name: {
+    	first: "Dave",
+      	last: "Nagoda"
+    }
+  };
+}
+
+var {name: {first: firstName}} = bar();
+console.log(firstName);
+> Dave
 					</code></pre>
 					<aside class="notes">
 						Destructuring allows you to assign complex function returns to matching structures of variables. This also works for objects! Destructuring is a deep subject and there are a lot of ways to use it.
