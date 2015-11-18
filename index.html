@@ -163,8 +163,10 @@ console.log(notMe)
 				<section>
 					<h2>Closures (a.k.a Awesome Sauce!)</h2>
 					<pre><code data-trim class="javascript">
+var fooVar = "This is not the string I you are looking for.";
+
 function foo() {
-	var fooVar = "hidden from global scope, unless...";
+	var fooVar = "Hidden this string is.";
 
 	function bar() {
 		return fooVar;
@@ -173,10 +175,10 @@ function foo() {
 	return bar;
 }
 
-var func = foo()
-
-console.log(func());
-> "hidden from the global scope, unless..."
+console.log(fooVar)
+> "This is not the string I you are looking for."
+console.log(foo()())
+> "Hidden this string is."
 					</code></pre>
 					<aside class="notes">
 						<p>
@@ -292,15 +294,15 @@ bar(5);
 				<section>
 					<h2>Functional Operators</h2>
 					<pre><code data-trim class="javascript">
-var angles = [0, 45, 90],
-    degreesToRadians = (angle) => angle / 180 * Math.PI;
-    radiansToUnitVector = (radians) => {
-    	return {x: Math.cos(radians), y: Math.sin(radians)};
-    };
+var angles = [0, 45, 90];
+var degreesToRadians = (angle) => angle / 180 * Math.PI;
+var radiansToUnitVector = (radians) => {
+    return {x: Math.cos(radians), y: Math.sin(radians)};
+};
 
 var uvs = angles.map(degreesToRadians).map(radiansToUnitVector);
 
-uvs.forEach(uv => console.log(uv) );
+uvs.forEach(uv => console.log(uv));
 > Object {x: 1, y: 0}
 > Object {x: 0.7071067811865476, y: 0.7071067811865475}
 > Object {x: 6.123233995736766e-17, y: 1}
@@ -496,13 +498,17 @@ class Extended extends Base {
 				</section>
 
 				<section>
-					<h2>Cool Projects</h2>
+					<h2>Awesome JavaScript</h2>
 					<p>Node.js</p>
 					<p><a href="https://nodejs.org/en/">https://nodejs.org/en/</a></p>
 					<p><a href="https://github.com/sindresorhus/awesome-nodejs">https://github.com/sindresorhus/awesome-nodejs</a></p>
 					<p>Electron</p>
 					<p><a href="https://github.com/atom/electron">https://github.com/atom/electron</a></p>
 					<p><a href="https://github.com/sindresorhus/awesome-electron">https://github.com/sindresorhus/awesome-electron</a></p>
+				</section>
+
+				<section>
+					<h2>Questions?</h2>
 				</section>
 			</div>
 		</div>
