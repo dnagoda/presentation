@@ -45,13 +45,6 @@
 					<p>
 						<small>Created by Dave Nagoda / <a href="mailto://dnagoda@clearwateranalytics.com">dnagoda@clearwateranalytics.com</a></small>
 					</p>
-				</section>
-
-				<section>
-					<h2>Surprise</h2>
-					<p>
-						We're already using JavaScript!
-					</p>
 					<aside class="notes">
 						This presentation was created using <a href="http://lab.hakim.se/reveal-js/#/">reveal.js</a> and it's being served using <a href="http://gruntjs.com/">grunt</a> and <a href="https://nodejs.org/en/">nodejs</a>.
 					</aside>
@@ -64,7 +57,7 @@
 							<li class="fragment">We're pressed for time so...</li>
 							<li class="fragment">JavaScript Language Highlights</li>
 							<li class="fragment">How To Live In The Future</li>
-							<span class="fragment"><li>Cool</span><span class="fragment">, Awesome</span><span class="fragment">, Amazing JavaScript</span></li>
+							<span class="fragment"><li>Awesome</span><span class="fragment"> JavaScript</span></li></span>
 						</ul>
 					</p>
 					<aside class="notes">
@@ -75,7 +68,7 @@
 				</section>
 
 				<section>
-					<h2>Everything Is An Object</h2>
+					<h2>Everything Is Object-like</h2>
 					<pre><code data-trim class="javascript">
 var thing = {};
 thing.question = 'Am I Thing One or Thing Two?';
@@ -89,33 +82,11 @@ console.log(typeof thing)
 console.log(thing instanceof Object)
 > true
 					</code></pre>
-					<aside class="notes">
-						<p>
-						TBD
-						</p>
-					</aside>
-				</section>
-
-				<section>
-					<h2>Except For Some Of The Things</h2>
-					<pre><code data-trim class="javascript">
+					<pre class="fragment"><code data-trim class="javascript">
 var number = 42;
-console.log(number)
-> 42
-
-console.log(typeof number)
-> "number"
-
-console.log(number instanceof Object)
-> false
-					</code></pre>
-					<div class="fragment">
-						<p>But, they still act like Objects, mostly.</p>
-						<pre><code data-trim class="javascript">
-number.toString();
+console.log(number.toString())
 > "42"
-						</code></pre>
-					</div>
+					</code></pre>
 					<aside class="notes">
 						<p>
 						Number, String, Boolean, null and undefined are more special. Along with some others, like Errors.
@@ -222,7 +193,8 @@ console.log(func());
 	console.log(args);
 })(1, 2, 3);
 > [1, 2, 3]
-
+					</code></pre>
+					<pre class="fragment"><code data-trim class="javascript">
 (function(first, second, ...rest) {
   console.log(first);
   console.log(second);
@@ -272,8 +244,9 @@ var a, b, c;
 function foo() {
 	return [1, 2, 3];
 }
+
 [a, b, c] = foo();
-console.log(c + ' ' + b + ' ' + a);
+console.log(c + ', ' + b + ', ' + a);
 > 3, 2, 1
 					</code></pre>
 					<pre class="fragment"><code data-trim class="javascript">
@@ -298,9 +271,17 @@ console.log(firstName);
 				<section>
 					<h2>Arrow Functions (ES6)</h2>
 					<pre><code data-trim class="javascript">
-var bar = (x, y) => console.log(x + y);
-bar(4, 5);
+var foo = (x, y) => console.log(x + y);
+foo(4, 5);
 > 9
+					</code></pre>
+					<pre class="fragment"><code data-trim class="javascript">
+var bar = (x, y = 0) => {
+	var z = x + y;
+	console.log(z);
+};
+bar(5);
+> 5
 					</code></pre>
 					<aside class="notes">
 						Arrow functions allow you to define simple functions quickly. They have some other
@@ -309,8 +290,53 @@ bar(4, 5);
 				</section>
 
 				<section>
+					<h2>Functional Operators</h2>
+					<pre><code data-trim class="javascript">
+var angles = [0, 45, 90],
+    degreesToRadians = (angle) => angle / 180 * Math.PI;
+    radiansToUnitVector = (radians) => {
+    	return {x: Math.cos(radians), y: Math.sin(radians)};
+    };
+
+var uvs = angles.map(degreesToRadians).map(radiansToUnitVector);
+
+uvs.forEach(uv => console.log(uv) );
+> Object {x: 1, y: 0}
+> Object {x: 0.7071067811865476, y: 0.7071067811865475}
+> Object {x: 6.123233995736766e-17, y: 1}
+					</code></pre>
+					<aside class="notes">
+						There are several libraries that provide a fuller set of functional
+						operators, but the Array object provides a basic set and it's already
+						supported in most modern browsers.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Checking Our Work</h2>
+					<pre><code data-trim class="javascript">
+var unitVectorToLength = ({x, y}) => {
+	return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))
+};
+
+var averageLength = uvs.reduce((tot, val) => {
+  return tot + unitVectorToLength(val);
+}, 0) / uvs.length;
+
+console.log(averageLength)
+> 1
+					</code></pre>
+					<aside class="notes">
+						Check out the arrow function. Notice the '{x, y}' at the start. That's
+						destructuring in action! We're saying take the object that is given and
+						pull out the x and y properties as arguments for the function. Nice!
+					</aside>
+				</section>
+
+				<section>
 					<h2>What is 'this'?</h2>
 					<pre><code data-trim class="javascript">
+// OFTEN SEEN IN THE WILD!!!
 'use strict';
 function foo() {
 	this.value = 42;
@@ -334,12 +360,17 @@ foo();
 							<li>a reference to the function</li>
 							<li>the function's scope</li>
 						</ul>
+
+						<p>NOTE: Without strict mode, 'this' will sometimes be set to the global
+							window Object. In that case, using this in the inner function would
+							appear to work as expected, but for the wrong reason.</p>
 					</aside>
 				</section>
 
 				<section>
 					<h2>How about 'this'?</h2>
 					<pre><code data-trim class="javascript">
+// BETTER? Maybe. MORE CORRECT? Definitely.
 'use strict';
 function foo() {
 	this.value = 42;
@@ -392,16 +423,7 @@ class Base {
 	}
 }
 					</code></pre>
-					<aside class="notes">
-						There can only be one 'constructor' method. There isn't a way to define class
-						properties other than it's constructor and methods. This is really just syntactic
-						sugar on top of regular Object prototypes.
-					</aside>
-				</section>
-
-				<section>
-					<h2>extends (ES6)</h2>
-					<pre><code data-trim class="javascript">
+					<pre class="fragment"><code data-trim class="javascript">
 class Extended extends Base {
 	constructor(name, surname) {
 		super(name);
@@ -413,9 +435,74 @@ class Extended extends Base {
 }
 					</code></pre>
 					<aside class="notes">
-						'extends' makes it easy to tie these prototypes together. You can use
-						'super' is access the parent classes methods.
+						There can only be one 'constructor' method. There isn't a way to define class
+						properties other than it's constructor and methods. This is really just syntactic
+						sugar on top of regular Object prototypes.
 					</aside>
+				</section>
+
+				<section>
+					<h2>What We Didn't Cover</h2>
+					<ul>
+						<li>strict mode</li>
+						<li>Prototypes</li>
+						<li>Promises</li>
+						<li>Symbols (ES6)</li>
+						<li>Template Literals (ES6)</li>
+						<li>Generators (ES6)</li>
+						<li>Modules (ES6)</li>
+						<li>Collections (ES6)</li>
+					</ul>
+					<aside class="notes">
+						Besides the new 'class' syntax, there's good old prototype expressions.
+
+						Promises are already supported by a lot of frameworks and libraries, but in
+						ES6 they're native!
+
+						Template literals are a better way to compose Strings using variables in the scope.
+
+						Collections including Maps and Sets!
+					</aside>
+				</section>
+
+				<section>
+					<h2>Living In The Future</h2>
+					<p><a href="https://kangax.github.io/compat-table/es6/">https://kangax.github.io/compat-table/es6/</a></p>
+					<p class="fragment">Language Extensions</p>
+					<p class="fragment">Language Additions</p>
+					<aside class="notes">
+						Let's define extensions as things like new methods on existing builtins.
+
+						Let's define additions as syntax changes or entirely new builtins.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Shims</h2>
+					<p>es6-shim</p>
+					<p><a href="https://github.com/paulmillr/es6-shim">https://github.com/paulmillr/es6-shim</a></p>
+					<p>Mozilla Developer Network (MDN)</p>
+					<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">https://developer.mozilla.org/en-US/docs/Web/JavaScript</a></p>
+				</section>
+
+				<section>
+					<h2>Transpilers</h2>
+					<p>Traceur</p>
+					<p><a href="https://github.com/google/traceur-compiler">https://github.com/google/traceur-compiler</a></p>
+					<p>Babel</p>
+					<p><a href="https://babeljs.io/">https://babeljs.io/</a></p>
+					<p>ScratchJS</p>
+					<p><a href="https://chrome.google.com/webstore/detail/scratch-js/alploljligeomonipppgaahpkenfnfkn?hl=en-US">https://chrome.google.com/webstore/detail/scratch-js/alploljligeomonipppgaahpkenfnfkn?hl=en-US</a></p>
+				</section>
+
+				<section>
+					<h2>Cool Projects</h2>
+					<p>Node.js</p>
+					<p><a href="https://nodejs.org/en/">https://nodejs.org/en/</a></p>
+					<p><a href="https://github.com/sindresorhus/awesome-nodejs">https://github.com/sindresorhus/awesome-nodejs</a></p>
+					<p>Electron</p>
+					<p><a href="https://github.com/atom/electron">https://github.com/atom/electron</a></p>
+					<p><a href="https://github.com/sindresorhus/awesome-electron">https://github.com/sindresorhus/awesome-electron</a></p>
 				</section>
 			</div>
 		</div>
